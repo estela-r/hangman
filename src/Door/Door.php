@@ -11,7 +11,6 @@ $door->unlock();
 // Should fail
 $door->unlock();
 
-
 class Door
 {
     private $state;
