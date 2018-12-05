@@ -2,14 +2,11 @@
 
 namespace App\Game\Loader;
 
-class TextFileLoader implements LoaderInterface
+class TextFileLoader extends AbstractLoader implements LoaderInterface
 {
-    /**
-     * @inheritdoc
-     */
-    public function load(string $dictionary): array
+    protected function doLoad(string $dictionary): array
     {
-        return array_map('trim', file($dictionary));
+        return file($dictionary);
     }
 
     public function getType(): string
