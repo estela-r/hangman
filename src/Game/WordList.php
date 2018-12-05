@@ -4,6 +4,7 @@ namespace App\Game;
 
 use App\Game\Exception\RuntimeException;
 use App\Game\Loader\LoaderInterface;
+use App\Game\Provider\RandomWordProviderInterface;
 
 class WordList implements WordGeneratorInterface
 {
@@ -11,11 +12,32 @@ class WordList implements WordGeneratorInterface
     private $loaders = [];
     private $loaded = false;
     private $dictionaries;
+    private $strategies = [];
 
-    public function __construct(array $dictionaries)
+    /**
+     * @param string $dictionaries
+     * @param RandomWordProviderInterface[] $strategies
+     */
+    public function __construct(array $dictionaries, iterable $strategies)
     {
         $this->dictionaries = $dictionaries;
+
+        $this->strategies = [];
+        foreach ($strategies as $strategy) {
+            if (!$strategy instanceof RandomWordProviderInterface) {
+                throw new \InvalidArgumentException();
+            }
+
+            $this->strategies[] = $strategy;
+        }
     }
+
+    /*
+    public function addStrategy(RandomWordProviderInterface $provider)
+    {
+        $this->strategies[$provider->getName()] = $provider;
+    }
+    */
 
     public function addLoader(LoaderInterface $loader): void
     {
@@ -26,11 +48,19 @@ class WordList implements WordGeneratorInterface
     /**
      * Returns a word picked randomly from the loaded dictionaries.
      */
-    public function getRandomWord(): string
+    public function getRandomWord(string $strategyName = 'array_rand'): string
     {
         $this->loadDictionaries();
 
-        return $this->words[array_rand($this->words)];
+        foreach ($this->strategies as $strategy) {
+            if ($strategy->supports($strategyName)) {
+                return $strategy->selectWord($this->words);
+            }
+        }
+
+        throw new \InvalidArgumentException('No strategy found!');
+
+        // return $this->words[array_rand($this->words)];
     }
 
     /**
