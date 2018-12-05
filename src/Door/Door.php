@@ -15,7 +15,7 @@ class Door
 
     public function __construct(string $state)
     {
-        if (!\in_array($state, ['open', 'closed', 'locked', 'unlocked'])) {
+        if (!\in_array($state, ['open', 'closed', 'locked'])) {
             throw new \InvalidArgumentException();
         }
 
