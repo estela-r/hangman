@@ -26,3 +26,10 @@ services:
         calls:
             - { method: 'addLoader', arguments: ['@App\Game\Loader\TextFileLoader'] }
             - { method: 'addLoader', arguments: ['@App\Game\Loader\XmlFileLoader'] }
+
+    App\Game\RunnerInterface:
+        alias: 'App\Game\LoggedRunner'
+
+    App\Game\LoggedRunner:
+        arguments:
+            $originalRunner: '@App\Game\Runner'

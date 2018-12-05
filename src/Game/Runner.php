@@ -7,7 +7,7 @@ use App\Game\Exception\LogicException;
 use App\Game\Exception\RuntimeException;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
-class Runner
+class Runner implements RunnerInterface
 {
     private $storage;
     private $wordList;
