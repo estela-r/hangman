@@ -1,5 +1,7 @@
 <?php
 
+//namespace App\Door;
+
 $door = new Door('closed');
 $door->open();
 $door->close();
@@ -8,6 +10,7 @@ $door->unlock();
 
 // Should fail
 $door->unlock();
+
 
 class Door
 {
@@ -28,26 +31,20 @@ class Door
             throw new \LogicException();
         }
 
-        $this->state = 'open';
+        $this->state = new App\Entity\OpenDoorState();
     }
-
-    public function close()
+    
+        public function close()
     {
-        if ($this->state !== 'open') {
-            throw new \LogicException();
-        }
-
-        $this->state = 'closed';
+        $this->state = $this->state->close(); //closes or throws exception
     }
 
     public function lock()
     {
-        if ($this->state !== 'closed') {
-            throw new \LogicException();
-        }
-
-        $this->state = 'locked';
+       $this->state = $this->state->lock();
     }
+
+
 
     public function unlock()
     {
