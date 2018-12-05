@@ -4,9 +4,9 @@ namespace App\Game\Provider;
 
 class ArrayRandWordProvider implements RandomWordProviderInterface
 {
-    public function getName(): string
+    public function supports(string $name): bool
     {
-        return 'array_rand';
+        return 'array_rand' === $name;
     }
 
     public function selectWord(array $words): string

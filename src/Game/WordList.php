@@ -28,7 +28,7 @@ class WordList implements WordGeneratorInterface
                 throw new \InvalidArgumentException();
             }
 
-            $this->strategies[$strategy->getName()] = $strategy;
+            $this->strategies[] = $strategy;
         }
     }
 
@@ -52,11 +52,13 @@ class WordList implements WordGeneratorInterface
     {
         $this->loadDictionaries();
 
-        if (!isset($this->strategies[$strategyName])) {
-            throw new \InvalidArgumentException();
+        foreach ($this->strategies as $strategy) {
+            if ($strategy->supports($strategyName)) {
+                return $strategy->selectWord($this->words);
+            }
         }
 
-        return $this->strategies[$strategyName]->selectWord($this->words);
+        throw new \InvalidArgumentException('No strategy found!');
 
         // return $this->words[array_rand($this->words)];
     }

@@ -4,9 +4,9 @@ namespace App\Game\Provider;
 
 class MtRandWordProvider implements RandomWordProviderInterface
 {
-    public function getName(): string
+    public function supports(string $name): bool
     {
-        return 'mt_rand';
+        return 'mt_rand' === $name;
     }
 
     public function selectWord(array $words): string
