@@ -23,6 +23,16 @@ services:
         exclude: '../src/{Entity,Migrations,Tests}'
 
     App\Game\WordList:
+        arguments:
+            $strategies: !tagged 'app.word_provider'
         calls:
             - { method: 'addLoader', arguments: ['@App\Game\Loader\TextFileLoader'] }
             - { method: 'addLoader', arguments: ['@App\Game\Loader\XmlFileLoader'] }
+
+    App\Game\Provider\ArrayRandWordProvider:
+        tags:
+            - { name: 'app.word_provider' }
+
+    App\Game\Provider\MtRandWordProvider:
+        tags:
+            - { name: 'app.word_provider' }
